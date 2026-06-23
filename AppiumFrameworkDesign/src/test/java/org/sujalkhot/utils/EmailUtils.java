@@ -4,7 +4,8 @@ import java.io.File;
 import java.util.Properties;
 
 import jakarta.mail.*;
-import jakarta.mail.Session;
+import jakarta.mail.Session; //this two library provide email functionality
+
 import jakarta.mail.internet.InternetAddress;
 import jakarta.mail.internet.MimeBodyPart;
 import jakarta.mail.internet.MimeMessage;
@@ -20,23 +21,24 @@ public class EmailUtils {
 
 		String to = ConfigReader.get("receiverEmail");
 
-		Properties prop = new Properties();
+		Properties prop = new Properties(); // Creates container to store Gmail configuration.
 
-		prop.put("mail.smtp.host", "smtp.gmail.com");
+		prop.put("mail.smtp.host", "smtp.gmail.com"); // SMTP = Simple Mail Transfer Protocol
+														// "Use Gmail's SMTP server to send the email."
 
-		prop.put("mail.smtp.port", "587");
+		prop.put("mail.smtp.port", "587"); // Port number (587 for TLS)
 
-		prop.put("mail.smtp.auth", "true");
+		prop.put("mail.smtp.auth", "true"); // Gmail username/password required
 
-		prop.put("mail.smtp.starttls.enable", "true");
+		prop.put("mail.smtp.starttls.enable", "true"); // Secure connection
 
-		Session session = Session.getInstance(
+		Session session = Session.getInstance( // Creates email session.
 
 				prop,
 
 				new Authenticator() {
 
-					protected PasswordAuthentication getPasswordAuthentication() {
+					protected PasswordAuthentication getPasswordAuthentication() { // Called automatically by Gmail.
 
 						return new PasswordAuthentication(from, password);
 
@@ -44,11 +46,11 @@ public class EmailUtils {
 
 				});
 
-		Message message = new MimeMessage(session);
+		Message message = new MimeMessage(session); // Creates actual email.
 
-		message.setFrom(new InternetAddress(from));
+		message.setFrom(new InternetAddress(from)); // Set Sender
 
-		message.setRecipients(
+		message.setRecipients( 					   // Set Receiver
 
 				Message.RecipientType.TO,
 
@@ -56,21 +58,21 @@ public class EmailUtils {
 
 		);
 
-		message.setSubject("Appium Automation Report");
+		message.setSubject("Appium Automation Report"); // Add Subject
 
-		Multipart multipart = new MimeMultipart();
+		Multipart multipart = new MimeMultipart(); // Because email contains multiple parts:
 
-		MimeBodyPart body = new MimeBodyPart();
+		MimeBodyPart body = new MimeBodyPart(); // Creates text section container.
 
-		body.setText("Automation execution completed.");
+		body.setText("Automation execution completed."); // Set Text
 
-		multipart.addBodyPart(body);
+		multipart.addBodyPart(body); // Add Text
 
-		addAttachment(multipart, "test-output/emailable-report.html");
+		addAttachment(multipart, "test-output/emailable-report.html"); // Attach File
 
-		addAttachment(multipart, "test-output/index.html");
+		addAttachment(multipart, "test-output/index.html"); // Attach File
 
-		addAttachment(multipart, "reports/ExtentReport.html");
+		addAttachment(multipart, "reports/ExtentReport.html"); // Attach File
 
 		File folder = new File("videos");
 
@@ -90,9 +92,9 @@ public class EmailUtils {
 
 		}
 
-		message.setContent(multipart);
+		message.setContent(multipart); // Set Email Content
 
-		Transport.send(message);
+		Transport.send(message); // Send Email
 
 	}
 
@@ -119,3 +121,17 @@ public class EmailUtils {
 	}
 
 }
+
+//	EmailUtil.sendEmail() → Load Sender Email → Load App Password → Load Receiver Email
+//	→ Create SMTP Properties → Set Gmail Server → Set Port 587 → Enable Authentication 
+//	→ Enable TLS Security → Create Session → Create Authenticator → Provide Credentials 
+//	→ Create Empty Email → Set Sender → Set Receiver → Set Subject → Create Body
+//	→ Load Report File → Create Multipart → Add Body → Add Attachment → Build Final Email
+//	→ Transport.send() → Gmail SMTP Server → Authenticate User → Accept Email → Deliver Email → Print "Email sent"
+
+
+
+
+
+
+
