@@ -1,0 +1,31 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE suite SYSTEM "https://testng.org/testng-1.0.dtd">
+<suite name="Loan Department" parallel="tests" thread-count="6">		<!-- collection of test folder - Suite-->
+
+	<listeners>
+		<listener class-name="test.Listeners"></listener>
+	</listeners>
+
+	<parameter name="TOPURL" value="https://loan.com" />  <!--Here we define it globally so we use in all tests-->
+
+	<test thread-count="5" name="Personal loan">
+		<parameter name="URL" value="https://perosnaloan.com" />  <!--Here we define it locally so we use in this test only-->
+		<parameter name="username" value="sujal"/>
+		<classes>
+			<class name="test.day1" />
+			<class name="test.day2" />
+			<class name="test.day4" />
+		</classes>
+	</test> <!-- Test -->
+
+	<test thread-count="5" name="Car loan">
+		<parameter name="URL" value="https://carloan.com" />  <!--Here we define it locally so we use in this test only-->
+		<classes>
+			<class name="test.day3">
+
+			</class>
+		</classes>
+	</test> <!-- Test -->
+
+</suite> 
+
